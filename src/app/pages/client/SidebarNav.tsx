@@ -16,6 +16,7 @@ import {
   SettingsTab,
   UnverifiedTab,
   SearchTab,
+  DeepDiveTab,
 } from './sidebar';
 import { CreateTab } from './sidebar/CreateTab';
 
@@ -34,6 +35,7 @@ export function SidebarNav() {
             <SpaceTabs scrollRef={scrollRef} />
             <SidebarStackSeparator />
             <SidebarStack>
+              <DeepDiveTab />
               <ExploreTab />
               <CreateTab />
             </SidebarStack>

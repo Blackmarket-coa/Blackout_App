@@ -29,6 +29,7 @@ import {
   _SEARCH_PATH,
   _SERVER_PATH,
   CREATE_PATH,
+  DEEPDIVE_PATH,
 } from './paths';
 import {
   getAppPathFromHref,
@@ -44,6 +45,7 @@ import { Home, HomeRouteRoomProvider, HomeSearch } from './client/home';
 import { Direct, DirectCreate, DirectRouteRoomProvider } from './client/direct';
 import { RouteSpaceProvider, Space, SpaceRouteRoomProvider, SpaceSearch } from './client/space';
 import { Explore, FeaturedRooms, PublicRooms } from './client/explore';
+import { DeepDive } from './client/deepdive';
 import { Notifications, Inbox, Invites } from './client/inbox';
 import { setAfterLoginRedirectPath } from './afterLoginRedirectPath';
 import { Room } from '../features/room';
@@ -241,6 +243,7 @@ export const createRouter = (clientConfig: ClientConfig, screenSize: ScreenSize)
             }
           />
         </Route>
+        <Route path={DEEPDIVE_PATH} element={<DeepDive />} />
         <Route
           path={EXPLORE_PATH}
           element={
