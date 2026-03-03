@@ -6,7 +6,10 @@ import { IPublicRoomsChunkRoom } from 'matrix-js-sdk';
 import { useMatrixClient } from '../../../hooks/useMatrixClient';
 import { AsyncStatus, useAsyncCallback } from '../../../hooks/useAsyncCallback';
 import { getHomeRoomPath } from '../../pathUtils';
+import { VideoFeed } from './VideoFeed';
 import * as css from './style.css';
+
+type DeepDiveTab = 'rooms' | 'videos';
 
 // --- Hook: fetch public rooms ---
 function usePublicRooms() {
@@ -175,8 +178,8 @@ function SwipeableCard({ room, onSwipeRight, onSwipeLeft, isTop }: SwipeableCard
   );
 }
 
-// --- Main DeepDive Page ---
-export function DeepDive() {
+// --- Room Swipe Content (extracted) ---
+function RoomSwipeContent() {
   const mx = useMatrixClient();
   const navigate = useNavigate();
   const { fetchState } = usePublicRooms();
@@ -232,11 +235,7 @@ export function DeepDive() {
   };
 
   return (
-    <div className={css.DeepDiveContainer}>
-      <div className={css.DeepDiveHeader}>
-        <span className={css.DeepDiveHeaderTitle}>DeepDive</span>
-      </div>
-
+    <>
       {fetchState.status === AsyncStatus.Loading && (
         <div className={css.LoadingContainer}>
           <Spinner size="400" />
@@ -314,6 +313,43 @@ export function DeepDive() {
           </div>
         </>
       )}
+    </>
+  );
+}
+
+// --- Main DeepDive Page ---
+export function DeepDive() {
+  const [activeTab, setActiveTab] = useState<DeepDiveTab>('rooms');
+
+  return (
+    <div className={css.DeepDiveContainer}>
+      <div className={css.DeepDiveHeader}>
+        <span className={css.DeepDiveHeaderTitle}>DeepDive</span>
+      </div>
+
+      {/* Tab Bar */}
+      <div className={css.TabBar}>
+        <button
+          className={`${css.Tab} ${activeTab === 'rooms' ? css.TabActive : ''}`}
+          onClick={() => setActiveTab('rooms')}
+          type="button"
+        >
+          <Icon src={Icons.Explore} size="200" />
+          Rooms
+        </button>
+        <button
+          className={`${css.Tab} ${activeTab === 'videos' ? css.TabActive : ''}`}
+          onClick={() => setActiveTab('videos')}
+          type="button"
+        >
+          <Icon src={Icons.Play} size="200" />
+          Videos
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      {activeTab === 'rooms' && <RoomSwipeContent />}
+      {activeTab === 'videos' && <VideoFeed />}
     </div>
   );
 }

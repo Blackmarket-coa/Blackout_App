@@ -334,3 +334,42 @@ export const LoadingContainer = style({
   flex: 1,
   color: color.Surface.OnContainer,
 });
+
+// --- Tab Bar ---
+export const TabBar = style({
+  display: 'flex',
+  alignItems: 'stretch',
+  flexShrink: 0,
+  borderBottom: `${config.borderWidth.B300} solid ${color.Background.ContainerLine}`,
+  backgroundColor: color.Background.Container,
+});
+
+export const Tab = style({
+  flex: 1,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: config.space.S200,
+  padding: `${config.space.S300} ${config.space.S400}`,
+  cursor: 'pointer',
+  border: 'none',
+  background: 'none',
+  color: color.Surface.OnContainer,
+  fontSize: toRem(14),
+  fontWeight: 500,
+  opacity: 0.6,
+  transition: 'opacity 150ms ease, border-color 150ms ease',
+  borderBottom: `${toRem(2)} solid transparent`,
+  selectors: {
+    '&:hover': {
+      opacity: 0.8,
+    },
+  },
+});
+
+export const TabActive = style({
+  opacity: 1,
+  fontWeight: 600,
+  borderBottomColor: color.Primary.Main,
+  color: color.Primary.Main,
+});
