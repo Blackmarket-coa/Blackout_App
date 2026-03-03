@@ -88,3 +88,7 @@ export const INBOX_INVITES_PATH = `/inbox/${_INVITES_PATH}`;
 export const SPACE_SETTINGS_PATH = '/space-settings/';
 
 export const ROOM_SETTINGS_PATH = '/room-settings/';
+
+export const DEEPDIVE_PATH = '/deepdive/';
+export const _DEEPDIVE_ROOM_PATH = ':roomIdOrAlias/';
+export const DEEPDIVE_ROOM_PATH = `/deepdive/${_DEEPDIVE_ROOM_PATH}`;

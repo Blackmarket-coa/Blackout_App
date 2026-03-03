@@ -29,6 +29,7 @@ import {
   _SEARCH_PATH,
   _SERVER_PATH,
   CREATE_PATH,
+  DEEPDIVE_PATH,
 } from './paths';
 import {
   getAppPathFromHref,
@@ -65,6 +66,7 @@ import { UserRoomProfileRenderer } from '../components/UserRoomProfileRenderer';
 import { CreateRoomModalRenderer } from '../features/create-room';
 import { HomeCreateRoom } from './client/home/CreateRoom';
 import { Create } from './client/create';
+import { DeepDive } from './client/deepdive';
 import { CreateSpaceModalRenderer } from '../features/create-space';
 import { SearchModalRenderer } from '../features/search';
 import { getFallbackSession } from '../state/sessions';
@@ -266,6 +268,7 @@ export const createRouter = (clientConfig: ClientConfig, screenSize: ScreenSize)
           <Route path={_SERVER_PATH} element={<PublicRooms />} />
         </Route>
         <Route path={CREATE_PATH} element={<Create />} />
+        <Route path={DEEPDIVE_PATH} element={<DeepDive />} />
         <Route
           path={INBOX_PATH}
           element={
