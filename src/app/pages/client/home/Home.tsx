@@ -33,6 +33,7 @@ import {
   encodeSearchParamValueArray,
   getExplorePath,
   getHomeCreatePath,
+  getHomeDeepDivePath,
   getHomeRoomPath,
   getHomeSearchPath,
   withSearchParam,
@@ -41,6 +42,7 @@ import { getCanonicalAliasOrRoomId } from '../../../utils/matrix';
 import { useSelectedRoom } from '../../../hooks/router/useSelectedRoom';
 import {
   useHomeCreateSelected,
+  useHomeDeepDiveSelected,
   useHomeSearchSelected,
 } from '../../../hooks/router/useHomeSelected';
 import { useHomeRooms } from './useHomeRooms';
@@ -206,6 +208,7 @@ export function Home() {
   const selectedRoomId = useSelectedRoom();
   const createRoomSelected = useHomeCreateSelected();
   const searchSelected = useHomeSearchSelected();
+  const deepDiveSelected = useHomeDeepDiveSelected();
   const noRoomToDisplay = rooms.length === 0;
   const [closedCategories, setClosedCategories] = useAtom(useClosedNavCategoriesAtom());
 
@@ -295,6 +298,22 @@ export function Home() {
                   </>
                 )}
               </UseStateProvider>
+              <NavItem variant="Background" radii="400" aria-selected={deepDiveSelected}>
+                <NavLink to={getHomeDeepDivePath()}>
+                  <NavItemContent>
+                    <Box as="span" grow="Yes" alignItems="Center" gap="200">
+                      <Avatar size="200" radii="400">
+                        <Icon src={Icons.Play} size="100" filled={deepDiveSelected} />
+                      </Avatar>
+                      <Box as="span" grow="Yes">
+                        <Text as="span" size="Inherit" truncate>
+                          Deep Dive
+                        </Text>
+                      </Box>
+                    </Box>
+                  </NavItemContent>
+                </NavLink>
+              </NavItem>
               <NavItem variant="Background" radii="400" aria-selected={searchSelected}>
                 <NavLink to={getHomeSearchPath()}>
                   <NavItemContent>
