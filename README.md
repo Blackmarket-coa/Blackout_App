@@ -109,3 +109,6 @@ docker run -p 8080:80 cinny:latest
 ```
 
 This will forward your `localhost` port 8080 to the container's port 80. You can visit the app in your browser by navigating to `http://localhost:8080`.
+
+> [!NOTE]
+> Some container platforms display all stderr output as `[err]`, including normal Nginx startup `notice` messages such as `start worker process`. If the line itself says `notice` and there are no `emerg`/`crit`/`error` entries, startup completed successfully.
