@@ -1,6 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import {
     buildFeatureEntrypointRegistry,
+    FEATURE_ROLLOUT_FLAGS_STORAGE_KEY,
+    FEATURE_ROLLOUT_PRESET_STORAGE_KEY,
     getQuickActionEntriesForSurface,
     invokeQuickAction,
     QUICK_ACTION_FIRST_RUN_STORAGE_KEY,
@@ -35,8 +37,8 @@ describe('feature entrypoint registry adapter', () => {
     });
 
     it('respects preset + flag visibility', () => {
-        const starter = buildFeatureEntrypointRegistry({ preset: 'starter' });
-        expect(starter.entries.map((entry) => entry.id)).toEqual([]);
+        const safer = buildFeatureEntrypointRegistry({ preset: 'safer' });
+        expect(safer.entries.map((entry) => entry.id)).toEqual([]);
 
         const governanceWithSearch = buildFeatureEntrypointRegistry({
             preset: 'governance',
@@ -48,6 +50,20 @@ describe('feature entrypoint registry adapter', () => {
             'open-inbox',
             'open-search',
         ]);
+    });
+
+    it('supports progressive rollout presets and kill switches', () => {
+        localStorage.setItem(FEATURE_ROLLOUT_PRESET_STORAGE_KEY, 'forum');
+        localStorage.setItem(
+            FEATURE_ROLLOUT_FLAGS_STORAGE_KEY,
+            JSON.stringify({ 'features.nav.search': true }),
+        );
+        localStorage.setItem('blackout.killSwitch.features.bmc.forum', 'true');
+
+        const registry = buildFeatureEntrypointRegistry();
+        expect(registry.preset).toBe('forum');
+        expect(registry.flags['features.nav.search']).toBe(true);
+        expect(registry.flags['features.bmc.forum']).toBe(false);
     });
 
     it('invokes quick actions via the action adapter', () => {
