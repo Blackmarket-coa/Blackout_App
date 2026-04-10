@@ -8,7 +8,7 @@ import {
   RoomEvent,
   SyncState,
 } from 'matrix-js-sdk';
-import { ReceiptContent, ReceiptType } from 'matrix-js-sdk/lib/@types/read_receipts';
+import { ReceiptContent, ReceiptType } from 'matrix-js-sdk';
 import { useCallback, useEffect } from 'react';
 import {
   Membership,

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { color, Text } from 'folds';
 import { JoinRule, MatrixError, RestrictedAllowType } from 'matrix-js-sdk';
-import { RoomJoinRulesEventContent } from 'matrix-js-sdk/lib/types';
+import { RoomJoinRulesEventContent } from 'matrix-js-sdk';
 import { useAtomValue } from 'jotai';
 import {
   ExtendedJoinRules,

@@ -19,7 +19,7 @@ import {
 import FocusTrap from 'focus-trap-react';
 import classNames from 'classnames';
 import { MatrixError, Room } from 'matrix-js-sdk';
-import { IHierarchyRoom } from 'matrix-js-sdk/lib/@types/spaces';
+import { IHierarchyRoom } from 'matrix-js-sdk';
 import { HierarchyItem } from '../../hooks/useSpaceHierarchy';
 import { useMatrixClient } from '../../hooks/useMatrixClient';
 import { RoomAvatar } from '../../components/room-avatar';

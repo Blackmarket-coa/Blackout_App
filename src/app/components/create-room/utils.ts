@@ -6,7 +6,7 @@ import {
   RestrictedAllowType,
   Room,
 } from 'matrix-js-sdk';
-import { RoomJoinRulesEventContent } from 'matrix-js-sdk/lib/types';
+import { RoomJoinRulesEventContent } from 'matrix-js-sdk';
 import { CreateRoomKind } from './CreateRoomKindSelector';
 import { RoomType, StateEvent } from '../../../types/matrix/room';
 import { getViaServers } from '../../plugins/via-servers';

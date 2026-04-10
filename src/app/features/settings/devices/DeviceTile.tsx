@@ -15,7 +15,7 @@ import {
   OverlayBackdrop,
   OverlayCenter,
 } from 'folds';
-import { CryptoApi } from 'matrix-js-sdk/lib/crypto-api';
+import { CryptoApi } from 'matrix-js-sdk';
 import FocusTrap from 'focus-trap-react';
 import { IMyDevice, MatrixError } from 'matrix-js-sdk';
 import { SettingTile } from '../../../components/setting-tile';
