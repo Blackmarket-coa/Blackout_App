@@ -14,7 +14,8 @@
     "check:eslint": "eslint src/*",
     "check:prettier": "prettier --check .",
     "fix:prettier": "prettier --write .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "migration:gate": "npm run typecheck && npm run build"
   },
   "keywords": [],
   "author": "Ajay Bura",

@@ -17,7 +17,7 @@ import {
   Room,
   RoomMember,
 } from 'matrix-js-sdk';
-import { CryptoBackend } from 'matrix-js-sdk/lib/common-crypto/CryptoBackend';
+import { CryptoBackend } from 'matrix-js-sdk';
 import { AccountDataEvent } from '../../types/matrix/accountData';
 import {
   IRoomCreateContent,

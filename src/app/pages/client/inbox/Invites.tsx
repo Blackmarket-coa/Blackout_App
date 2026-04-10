@@ -18,7 +18,7 @@ import {
   config,
 } from 'folds';
 import { useAtomValue } from 'jotai';
-import { RoomTopicEventContent } from 'matrix-js-sdk/lib/types';
+import { RoomTopicEventContent } from 'matrix-js-sdk';
 import FocusTrap from 'focus-trap-react';
 import { MatrixClient, MatrixError, Room } from 'matrix-js-sdk';
 import {
