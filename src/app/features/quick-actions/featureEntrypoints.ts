@@ -1,4 +1,10 @@
-export type FeaturePresetKey = 'starter' | 'governance' | 'sovereignty';
+export type FeaturePresetKey =
+    | 'safer'
+    | 'governance'
+    | 'forum'
+    | 'roles'
+    | 'call'
+    | 'sovereignty';
 
 export type QuickActionSurface = 'desktop' | 'mobile';
 
@@ -30,8 +36,11 @@ export interface BuildRegistryOptions {
     flags?: Record<string, boolean>;
 }
 
+export const FEATURE_ROLLOUT_PRESET_STORAGE_KEY = 'blackout.features.preset';
+export const FEATURE_ROLLOUT_FLAGS_STORAGE_KEY = 'blackout.features.flags';
+
 const PRESET_FLAGS: Record<FeaturePresetKey, Record<string, boolean>> = {
-    starter: {
+    safer: {
         'features.settings.appearance': false,
         'features.settings.account': false,
         'features.nav.roomInvites': false,
@@ -50,6 +59,36 @@ const PRESET_FLAGS: Record<FeaturePresetKey, Record<string, boolean>> = {
         'features.bmc.roles': false,
         'features.call.elementCall': false,
         'features.bmc.forum': false,
+    },
+    forum: {
+        'features.settings.appearance': true,
+        'features.settings.account': true,
+        'features.nav.roomInvites': false,
+        'features.nav.search': false,
+        'features.timeline.threads': false,
+        'features.bmc.roles': false,
+        'features.call.elementCall': false,
+        'features.bmc.forum': true,
+    },
+    roles: {
+        'features.settings.appearance': true,
+        'features.settings.account': true,
+        'features.nav.roomInvites': false,
+        'features.nav.search': false,
+        'features.timeline.threads': false,
+        'features.bmc.roles': true,
+        'features.call.elementCall': false,
+        'features.bmc.forum': true,
+    },
+    call: {
+        'features.settings.appearance': true,
+        'features.settings.account': true,
+        'features.nav.roomInvites': false,
+        'features.nav.search': false,
+        'features.timeline.threads': false,
+        'features.bmc.roles': true,
+        'features.call.elementCall': true,
+        'features.bmc.forum': true,
     },
     sovereignty: {
         'features.settings.appearance': true,
@@ -118,12 +157,56 @@ const FEATURE_ENTRYPOINTS: FeatureEntry[] = [
 export const QUICK_ACTION_COLLAPSED_STORAGE_KEY = 'blackout.quick_actions.collapsed';
 export const QUICK_ACTION_FIRST_RUN_STORAGE_KEY = 'blackout.quick_actions.seen';
 
+const ROLLOUT_KILL_SWITCH_KEYS = [
+    'features.bmc.forum',
+    'features.bmc.roles',
+    'features.call.elementCall',
+] as const;
+
+const PRESET_KEYS = new Set<FeaturePresetKey>([
+    'safer',
+    'governance',
+    'forum',
+    'roles',
+    'call',
+    'sovereignty',
+]);
+
+const parseBooleanRecord = (raw: string | null): Record<string, boolean> => {
+    if (!raw) return {};
+    try {
+        const parsed = JSON.parse(raw) as unknown;
+        if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) return {};
+        return Object.entries(parsed).reduce<Record<string, boolean>>((acc, [key, value]) => {
+            if (typeof value === 'boolean') acc[key] = value;
+            return acc;
+        }, {});
+    } catch {
+        return {};
+    }
+};
+
+const readRolloutPreset = (): FeaturePresetKey | undefined => {
+    const presetKey = globalThis.localStorage?.getItem(FEATURE_ROLLOUT_PRESET_STORAGE_KEY);
+    return presetKey && PRESET_KEYS.has(presetKey as FeaturePresetKey)
+        ? (presetKey as FeaturePresetKey)
+        : undefined;
+};
+
+const readRolloutFlagOverrides = (): Record<string, boolean> =>
+    parseBooleanRecord(globalThis.localStorage?.getItem(FEATURE_ROLLOUT_FLAGS_STORAGE_KEY));
+
 export function buildFeatureEntrypointRegistry(
     options: BuildRegistryOptions = {},
 ): FeatureEntrypointRegistry {
-    const preset = options.preset ?? 'sovereignty';
+    const preset = options.preset ?? readRolloutPreset() ?? 'safer';
     const base = PRESET_FLAGS[preset];
-    const flags = { ...base, ...(options.flags ?? {}) };
+    const flags = { ...base, ...readRolloutFlagOverrides(), ...(options.flags ?? {}) };
+    ROLLOUT_KILL_SWITCH_KEYS.forEach((key) => {
+        if (flags[key] === false) return;
+        const killSwitchEnabled = globalThis.localStorage?.getItem(`blackout.killSwitch.${key}`) === 'true';
+        if (killSwitchEnabled) flags[key] = false;
+    });
     const entries = FEATURE_ENTRYPOINTS.filter((entry) => flags[entry.presetKey] ?? false);
     return { preset, flags, entries };
 }
@@ -197,8 +280,8 @@ export function invokeQuickAction(
             context.queueCommand('/invite');
             return;
         default: {
-            const exhaustive: never = actionId;
-            return exhaustive;
+            const exhaustive = actionId as never;
+            throw new Error(`Unhandled quick action: ${exhaustive}`);
         }
     }
 }
