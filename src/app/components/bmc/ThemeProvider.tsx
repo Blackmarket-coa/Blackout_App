@@ -1,6 +1,6 @@
 import { useEffect, type PropsWithChildren } from 'react';
 import { useAtomValue } from 'jotai';
-import { themePreferenceAtom } from '../state/theme-atoms';
+import { themePreferenceAtom } from '../../state/theme-atoms';
 import { allThemeClasses, applyThemeToRoot } from '../styles/theme.css';
 
 export const ThemeProvider = ({ children }: PropsWithChildren) => {
